@@ -165,7 +165,7 @@ def main():
         
     if cli.daemon is False:
         print(message)
-    if exitcode not in cli.valid_exitcodes:
+    if exitcode not in cli.valid_exitcodes: 
         if config['email']['enabled']:
             try: send_to_email(subject='ewn@{0} FAILED: {1} '.format(socket.gethostname(), cli.command), message=message)
             except: print("Failed to send email.")

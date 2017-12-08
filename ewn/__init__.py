@@ -34,7 +34,7 @@ def main():
         process = subprocess.Popen(str(command), stderr=subprocess.STDOUT, stdout=subprocess.PIPE, shell=True, executable='/bin/bash')
         output = process.communicate()[0]
         return process.returncode, output
-        
+
     def sighup_handler(signal, frame):
         pass
 
@@ -44,7 +44,10 @@ def main():
             self.tmp_file_path = '{0}/ewn-{1}.lock'.format(gettempdir(), self.file_name)
         
         def create(self):
-            open(self.tmp_file_path, 'a').close()
+            tfile = open(self.tmp_file_path, 'w')
+            print(os.getpid())
+            tfile.write(str(os.getpid()))
+            tfile.close()
 
         def remove(self):
             try:
@@ -52,8 +55,18 @@ def main():
             except OSError:
                 pass
 
-        def check(self):
-            return os.path.isfile(self.tmp_file_path)
+        def lock_exist(self):
+            if (os.path.isfile(self.tmp_file_path)):
+                pid = open(self.tmp_file_path, 'r').read()
+                if (self.__pid_exist(pid)):
+                    return True
+            return False
+        
+        @staticmethod
+        def __pid_exist(pid):
+            if os.path.isdir('/proc/{}'.format(pid)):
+                return True
+            return False
 
     def send_to_email(subject, message):
         msg = MIMEText(message)
@@ -88,7 +101,7 @@ def main():
         cli.command, socket.gethostname(), cli.comment, cli.valid_exitcodes, cli.retry, cli.retry_sleep, cli.daemon, cli.dont_duplicate)
     exitcode = None
 
-    if (cli.dont_duplicate is False) or (RunFile().check() is False):
+    if (cli.dont_duplicate is False) or (RunFile().lock_exist() is False):
         RunFile().create()
         for retry in range(1, cli.retry+1):
             if exitcode not in cli.valid_exitcodes:

@@ -1,4 +1,3 @@
-#!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import subprocess
 import sys, os
@@ -71,7 +70,10 @@ def main():
     def send_to_email(subject, message):
         msg = MIMEText(message)
         msg['Subject'] = subject
-        msg['From'] = 'ewn@' + socket.gethostname()
+        if ('from' in config['email']) and (config['email']['from'] is not None):
+            msg['From'] = config['email']['from']
+        else:
+            msg['From'] = 'ewn@' + socket.gethostname()
         msg['To'] = ", ".join(cli.recipients)
         s = smtplib.SMTP(config['email']['host'])
         s.login(str(config['email']['user']), str(config['email']['pass']))

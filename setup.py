@@ -6,6 +6,7 @@ https://github.com/pypa/sampleproject
 
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
+from shutil import copyfile
 # To use a consistent encoding
 from codecs import open
 from os import path
@@ -19,7 +20,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.2',
+    version='1.0.5',
 
     description='Execute With Notify',
     long_description="Whis is wrapper script, what can notify you when your tasks failed.",
@@ -81,9 +82,7 @@ setup(
     # need to place data files outside of your packages. See:
     # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa
     # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-    data_files=[
-        ('/etc', ['ewn.conf'])
-        ],
+    data_files=[],
 
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
@@ -94,3 +93,14 @@ setup(
         ],
     },
 )
+
+config_dir = '/etc/'
+config_files = [
+                   (config_dir, 'ewn.conf'),
+               ]
+
+for config in config_files:
+    if not path.exists(config[0]):
+        os.makedirs(config[0])
+    if not path.exists(path.join(config[0], config[1])):
+        copyfile(config[1], path.join(config[0], config[1]))

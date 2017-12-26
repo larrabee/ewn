@@ -44,7 +44,6 @@ def main():
         
         def create(self):
             tfile = open(self.tmp_file_path, 'w')
-            print(os.getpid())
             tfile.write(str(os.getpid()))
             tfile.close()
 

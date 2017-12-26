@@ -76,6 +76,10 @@ def main():
             msg['From'] = 'ewn@' + socket.gethostname()
         msg['To'] = ", ".join(cli.recipients)
         s = smtplib.SMTP(config['email']['host'])
+        if config['email']['secure'] is True:
+            s.ehlo()
+            s.starttls(tuple())
+            s.ehlo()
         s.login(str(config['email']['user']), str(config['email']['pass']))
         s.sendmail(msg['From'], cli.recipients, msg.as_string())
         s.quit()

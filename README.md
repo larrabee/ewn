@@ -1,5 +1,5 @@
 # Execute With Notify
-Whis is wrapper script, what can notify you when your tasks failed.
+This is wrapper script, what can notify you when your tasks failed.
 
 ## Features
 1. Notify with email
@@ -25,7 +25,7 @@ You must modify file `/etc/ewn.conf`
 `ewn -c 'echo "This is test command" && /bin/false' -r "user3@example.com" "user4@example.com"`  
 * Exec command with comment message. It will be attached to email and Graylog message:  
 `ewn -c 'echo "This is test command" && /bin/false' --comment "This command will always fail"`  
-* Exec command in background mode. It will ignore SIGHUP signal.  
+* Exec command in background (daemon) mode. It will ignore SIGHUP signal.  
 `ewn -c 'echo "This is test command" && /bin/false' -d`  
 * Exec command that prevent duplicate processes:  
 `ewn -c 'echo "This is test command" && /bin/sleep 3600' --dont-duplicate`  
